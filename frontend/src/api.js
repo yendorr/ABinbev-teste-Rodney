@@ -59,10 +59,12 @@ export const getProducts = async () => {
 
 
 export const updateProduct = async (id, updatedData) => {
+    const token = localStorage.getItem('authToken'); // Obtenha o token de autenticação
     const response = await fetch(`http://localhost:8000/products/${id}`, {
         method: 'PUT',
         headers: {
-            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`, // Adiciona o token ao cabeçalho
+            'Content-Type': 'application/json', // Define o tipo de conteúdo
         },
         body: JSON.stringify(updatedData), // Envie os dados atualizados no corpo da requisição
     });

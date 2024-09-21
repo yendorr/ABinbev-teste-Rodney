@@ -20,7 +20,7 @@ async def add_product(product: ProductInput):
     result = await db["products"].insert_one(product_data)
     return {"id": str(result.inserted_id), **product_data}
 
-@router.patch("/{product_id}", response_model=ProductOutput, dependencies=[Depends(check_admin)])
+@router.put("/{product_id}", response_model=ProductOutput, dependencies=[Depends(check_admin)])
 async def edit_product(product_id: str, product: ProductInput):
     # Converte o modelo de produto para um dicionário
     product_data = product.dict(exclude_unset=True)  # Exclui campos que não foram enviados na requisição

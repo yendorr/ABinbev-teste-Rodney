@@ -58,7 +58,7 @@ const Products = () => {
         try {
             await updateProduct(id, { name: updatedName, price: updatedPrice }); // Chama a função de atualização
             setProducts(products.map((product) => 
-                (product.id === id ? { ...product, name: updatedName, price: updatedPrice } : product)
+                (product._id === id ? { ...product, name: updatedName, price: updatedPrice } : product)
             )); // Atualiza a lista
             setEditingProduct(null); // Fecha o modo de edição
             setUpdatedName(''); // Limpa os campos
@@ -73,7 +73,8 @@ const Products = () => {
         try {
             const token = localStorage.getItem('authToken'); // Pegando o token
             const newProduct = await createProduct({ name: newProductName, price: newProductPrice },token);
-            setProducts([...products, newProduct]); // Adiciona o novo produto à lista
+            const newProduct2 = { _id: newProduct.id, name: newProductName, price: newProductPrice };
+            setProducts([...products, newProduct2]); // Adiciona o novo produto à lista
             setNewProductName(''); // Limpa os campos
             setNewProductPrice('');
         } catch (err) {
@@ -109,7 +110,7 @@ const Products = () => {
                 {products.map((product) => (
         
                     <li key={product._id}>
-                        {editingProduct && editingProduct.id === product.id ? (
+                        {editingProduct && editingProduct._id === product._id ? (
                             <div>
                                 <input
                                     type="text"
@@ -121,12 +122,12 @@ const Products = () => {
                                     value={updatedPrice}
                                     onChange={(e) => setUpdatedPrice(e.target.value)}
                                 />
-                                <button onClick={() => handleUpdate(product.id)}>Atualizar</button>
+                                <button onClick={() => handleUpdate(product._id)}>Atualizar</button>
                                 <button onClick={() => setEditingProduct(null)}>Cancelar</button>
                             </div>
                         ) : (
                             <div>
-                                {product.id}- {product._id} -{product.name} - R$ {product.price} - 
+                                {product.name} - R$ {product.price} - 
                                 <button onClick={() => handleEdit(product)}>Editar</button>
                                 <button onClick={() => handleDelete(product._id)}>Remover</button>
                                 <button onClick={() => handleAddToCart(product._id)}>Adicionar ao Carrinho</button>
