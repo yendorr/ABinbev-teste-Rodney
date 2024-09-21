@@ -140,3 +140,31 @@ export const deleteUser = async (userId) => {
     return await response.json();
 };
 
+export const getCartItems = async () => {
+    const token = localStorage.getItem('authToken'); // Adicione o token de autenticação
+    const response = await fetch('http://localhost:8000/cart/cart/', {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
+    });
+    if (!response.ok) {
+        throw new Error('Failed to fetch cart items');
+    }
+    
+    return await response.json(); // Retorna os itens do carrinho
+};
+
+export const finalizeOrder = async () => {
+    const token = localStorage.getItem('authToken'); // Adicione o token de autenticação
+    const response = await fetch('http://localhost:8000/cart/order', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+    });
+    if (!response.ok) {
+        throw new Error('Failed to finalize order');
+    }
+};
+
