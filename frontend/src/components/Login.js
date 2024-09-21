@@ -18,7 +18,7 @@ const Login = () => {
             const data = await loginUser(username, password);
             setSuccess('Login bem-sucedido!');
             console.log('User logged in:', data);
-            
+            localStorage.setItem('authToken', data.access_token); // Armazenando o token
             navigate('/main'); // Redireciona para a página principal ou outra rota
         } catch (err) {
             setError(err.detail || 'Erro ao fazer login.');

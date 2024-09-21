@@ -30,6 +30,23 @@ export const loginUser = async (username, password) => {
     }
 };
 
+export const createProduct = async (product, token) => {
+    try {
+        const response = await axios.post(
+            `${API_URL}/products/`, 
+            product,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Inclua o token aqui
+                },
+            }
+        );
+        return response.data;
+    } catch (error) {
+        throw error.response.data || 'Erro ao criar produto';
+    }
+};
+
 // Função para buscar produtos
 export const getProducts = async () => {
     const response = await fetch('http://localhost:8000/products'); // Altere para a URL da sua API
@@ -56,24 +73,36 @@ export const updateProduct = async (id, updatedData) => {
 
 
 export const deleteProduct = async (id) => {
+    const token = localStorage.getItem('authToken'); // Obtenha o token de autenticação
     const response = await fetch(`http://localhost:8000/products/${id}`, {
         method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${token}`, // Adiciona o token ao cabeçalho
+            'Content-Type': 'application/json', // Define o tipo de conteúdo
+        },
     });
+
     if (!response.ok) {
         throw new Error('Failed to delete product');
     }
+    return await response.json(); // Retorna a resposta se necessário
 };
 
-export const addToCart = async (id) => {
-    const response = await fetch(`http://localhost:8000/cart/cart`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ productId: id }), // Envie o ID do produto no corpo da requisição
-    });
-    if (!response.ok) {
-        throw new Error('Failed to add product to cart');
+export const addToCart = async (productId, token) => {
+    try {
+        console.log({ "product_id": productId, "quantity": 1 })
+        const response = await axios.post(
+            `http://localhost:8000/cart/cart`, 
+            { "product_id": productId, "quantity": 1 }, 
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}` // Enviando o token JWT no cabeçalho
+                }
+            }
+        );
+        return response.data;
+    } catch (error) {
+        throw error.response.data || 'Erro ao adicionar ao carrinho';
     }
 };
 
@@ -91,7 +120,7 @@ export const viewCart = async (token) => {
 };
 
 export const getUsers = async () => {
-    const response = await fetch('/api/users'); // Altere para a URL correta da sua API
+    const response = await fetch('auth/users'); // Altere para a URL correta da sua API
     if (!response.ok) {
         throw new Error('Erro ao buscar usuários');
     }
@@ -100,7 +129,7 @@ export const getUsers = async () => {
 
 
 export const deleteUser = async (userId) => {
-    const response = await fetch(`/api/users/${userId}`, {
+    const response = await fetch(`auth/users/${userId}`, {
         method: 'DELETE',
     });
     if (!response.ok) {
@@ -109,4 +138,3 @@ export const deleteUser = async (userId) => {
     return await response.json();
 };
 
-// Adicione outras funções conforme necessário

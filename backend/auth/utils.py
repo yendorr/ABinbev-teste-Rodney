@@ -35,6 +35,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
         if username is None:
+            print("ALGO OCORREU")
             raise HTTPException(status_code=401, detail="Invalid credentials")
         user = await db["users"].find_one({"username": username})
         if user is None:

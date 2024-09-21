@@ -5,7 +5,8 @@ import Register from './components/Register';
 import MainPage from './components/MainPage';
 // import AdminRoute from './components/AdminRoute';
 import AdminComponent from './components/AdminComponent';
-import { AuthProvider } from './AuthContext';
+import PrivateRoute from './components/PrivateRoute';
+import { AuthProvider } from './context/AuthContext';
 
 
 const App = () => {
@@ -15,7 +16,6 @@ const App = () => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/main" element={<MainPage />} />
-                {/* <AdminRoute path="/admin" element={<AdminComponent />} /> Rota admin */}
                 <Route path="/" element={<Login />} />
             </Routes>
         </Router>
