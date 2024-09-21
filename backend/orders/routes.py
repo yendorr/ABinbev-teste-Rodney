@@ -1,15 +1,21 @@
 from fastapi import APIRouter, Depends
+from auth.utils import get_current_user
+from models.output import UserOutput
 from database import db
+from products.utils import convert_objectid_to_str
+
 
 router = APIRouter()
 
-@router.post("/")
-async def place_order(user: str):
-    cart_items = await db["cart"].find({"user_id": user}).to_list(100)
-    await db["orders"].insert_one({"user_id": user, "items": cart_items})
-    return {"msg": "Order placed successfully"}
+@router.get("/orders", response_model=list)
+async def list_orders(current_user: UserOutput = Depends(get_current_user)):
+    # Busca as ordens do usuário no banco de dados
+    orders = await db["orders"].find({"user_id": current_user['_id']}).to_list(100)
+    
+    # Converte ObjectId para string, se necessário
+    for order in orders:
+        order['_id'] = str(order['_id'])  # Converte o ObjectId para string
+        for item in order["items"]:
+            item["product_id"] = str(item["product_id"])  # Converte product_id para string
 
-@router.get("/")
-async def list_orders(user: str):
-    orders = await db["orders"].find({"user_id": user}).to_list(100)
-    return orders
+    return convert_objectid_to_str(orders)

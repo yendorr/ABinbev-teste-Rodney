@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from database import db
 from bson import ObjectId
 from models.input import CartItem
@@ -37,3 +37,42 @@ async def add_to_cart(item: CartItem, current_user: UserOutput = Depends(get_cur
     await db["carts"].update_one({"user_id": current_user['_id']}, {"$set": cart}, upsert=True)
     return {"message": "Item added to cart"}
 
+@router.post("/order")
+async def place_order(current_user: UserOutput = Depends(get_current_user)):
+    cart = await db["carts"].find_one({"user_id": current_user['_id']})
+    if not cart or not cart["items"]:
+        raise HTTPException(status_code=400, detail="Cart is empty")
+
+    total = 0
+    order_items = []
+
+    for item in cart["items"]:
+        product = await db["products"].find_one({"_id": ObjectId(item["product_id"])})
+        if not product:
+            raise HTTPException(status_code=404, detail="Product not found")
+
+        order_items.append({
+            "product_id": str(item["product_id"]),  # Convertendo para string
+            "quantity": item["quantity"],
+            "price": product["price"]
+        })
+        total += item["quantity"] * product["price"]
+
+    order = {
+        "user_id": str(current_user['_id']),  # Convertendo para string
+        "items": order_items,
+        "total": total
+    }
+
+    await db["orders"].insert_one(order)
+    await db["carts"].delete_one({"user_id": current_user['_id']})
+    
+    # Retornando a ordem com todos os IDs convertidos em string
+    return {
+        "message": "Order placed successfully",
+        "order": {
+            "user_id": order["user_id"],
+            "items": order_items,
+            "total": order["total"]
+        }
+    }
