@@ -9,7 +9,7 @@ router = APIRouter()
 
 @router.post("/register", response_model=UserOutput)
 async def register(user: UserInput):
-    existing_user = await db["users"].find_one({"username": user['username']})
+    existing_user = await db["users"].find_one({"username": user.username})
     if existing_user:
         raise HTTPException(status_code=400, detail="Username already registered")
 
@@ -39,11 +39,11 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 async def change_password(password_data: PasswordChangeInput, current_user: UserOutput = Depends(get_current_user)):
     # Verifica se a senha atual está correta
     user_db = await db["users"].find_one({"username": current_user['username']})
-    if not user_db or not verify_password(password_data['current_password'], user_db["password"]):
+    if not user_db or not verify_password(password_data.current_password, user_db["password"]):
         raise HTTPException(status_code=400, detail="Current password is incorrect")
     
     # Atualiza a senha
-    new_password_hash = get_password_hash(password_data['new_password'])
+    new_password_hash = get_password_hash(password_data.new_password)
     await db["users"].update_one({"username": current_user['username']}, {"$set": {"password": new_password_hash}})
     
     return {"message": "Password updated successfully"}

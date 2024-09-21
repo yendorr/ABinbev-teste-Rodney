@@ -20,6 +20,31 @@ async def add_product(product: ProductInput):
     result = await db["products"].insert_one(product_data)
     return {"id": str(result.inserted_id), **product_data}
 
+@router.patch("/{product_id}", response_model=ProductOutput, dependencies=[Depends(check_admin)])
+async def edit_product(product_id: str, product: ProductInput):
+    # Converte o modelo de produto para um dicionário
+    product_data = product.dict(exclude_unset=True)  # Exclui campos que não foram enviados na requisição
+
+    # Tenta atualizar o produto no banco de dados
+    result = await db["products"].update_one(
+        {"_id": ObjectId(product_id)},
+        {"$set": product_data}
+    )
+
+    # Verifica se o produto foi encontrado e atualizado
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    # Retorna o produto atualizado
+    updated_product = await db["products"].find_one({"_id": ObjectId(product_id)})
+    
+    # Converte o ObjectId para string e renomeia _id para id
+    updated_product["id"] = str(updated_product["_id"])
+    del updated_product["_id"]
+    
+    return updated_product
+
+
 @router.delete("/{product_id}", response_model=dict, dependencies=[Depends(check_admin)])
 async def delete_product(product_id: str):
     result = await db["products"].delete_one({"_id": ObjectId(product_id)})
@@ -27,3 +52,5 @@ async def delete_product(product_id: str):
         return {"message": "Product deleted successfully"}
     else:
         raise HTTPException(status_code=404, detail="Product not found")
+    
+
