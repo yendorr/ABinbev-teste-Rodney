@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from models.input import UserLogin,UserInput
 from models.output import TokenOutput,UserOutput
 from database import db
@@ -25,6 +26,15 @@ async def login(user: UserLogin):
     access_token = create_access_token(data={"sub": user.username})
     return {"access_token": access_token, "token_type": "bearer"}
 
+@router.post("/token", response_model=TokenOutput)
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+    user = await db["users"].find_one({"username": form_data.username})
+    if not user or not verify_password(form_data.password, user["password"]):
+        raise HTTPException(status_code=401, detail="Incorrect username or password")
+
+    access_token = create_access_token(data={"sub": user["username"]})
+    return {"access_token": access_token, "token_type": "bearer"}
+
 @router.delete("/users/{username}", response_model=dict)
 async def delete_user(username: str):
     # Verifica se o usuário existe
@@ -39,4 +49,6 @@ async def delete_user(username: str):
         raise HTTPException(status_code=500, detail="Failed to delete user")
     
     return {"detail": "User deleted successfully"}
+
+
 
