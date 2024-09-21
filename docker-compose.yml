@@ -1,6 +1,14 @@
 version: "3.8"
 
 services:
+  mongo:
+      image: mongo:6.0
+      container_name: mongo
+      ports:
+        - "27018:27017"  # Mapeia a porta 27018 do host para a porta 27017 do contêiner
+      volumes:
+        - mongo-data:/data/db
+
   backend:
     build:
       context: ./backend
@@ -15,13 +23,15 @@ services:
     volumes:
       - ./backend:/app
 
-  mongo:
-    image: mongo:6.0
-    container_name: mongo
+  frontend:
+    build:
+      context: ./frontend
     ports:
-      - "27018:27017"  # Mapeia a porta 27018 do host para a porta 27017 do contêiner
-    volumes:
-      - mongo-data:/data/db
+      - "3000:80"
+    depends_on:
+      - backend
+
+  
 
 volumes:
   mongo-data:
