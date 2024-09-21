@@ -13,13 +13,30 @@ async def register(user: UserInput):
         raise HTTPException(status_code=400, detail="Username already registered")
 
     user_data = user.dict()
+    user_data["password"] = get_password_hash(user.password)  # Hash da senha
     result = await db["users"].insert_one(user_data)
     return {"id": str(result.inserted_id), **user_data}
 
 @router.post("/login", response_model=TokenOutput)
 async def login(user: UserLogin):
     user_db = await db["users"].find_one({"username": user.username})
-    if not user_db or not verify_password(user.password, user_db["password"]):
+    if not user_db or not verify_password(user.password, user_db["password"]):  # Verifica o hash
         raise HTTPException(status_code=400, detail="Invalid credentials")
     access_token = create_access_token(data={"sub": user.username})
     return {"access_token": access_token, "token_type": "bearer"}
+
+@router.delete("/users/{username}", response_model=dict)
+async def delete_user(username: str):
+    # Verifica se o usuário existe
+    user_db = await db["users"].find_one({"username": username})
+    if not user_db:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Deleta o usuário
+    result = await db["users"].delete_one({"username": username})
+    
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=500, detail="Failed to delete user")
+    
+    return {"detail": "User deleted successfully"}
+
