@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+
 // Configure a base URL da sua API
 const API_URL = 'http://localhost:8000'; 
 
