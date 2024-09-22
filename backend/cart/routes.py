@@ -10,7 +10,7 @@ from products.utils import convert_objectid_to_str
 
 router = APIRouter()
 
-@router.get("/cart")
+@router.get("/")
 async def view_cart(current_user: UserOutput = Depends(get_current_user)):
     print(f'{current_user = }')
     cart = await db["carts"].find_one({"user_id": current_user['_id']})
@@ -19,7 +19,7 @@ async def view_cart(current_user: UserOutput = Depends(get_current_user)):
     return convert_objectid_to_str(cart)
 
 
-@router.post("/cart")
+@router.post("/")
 async def add_to_cart(item: CartItem, current_user: UserOutput = Depends(get_current_user)):
     # Adicionar item ao carrinho do usuário
     cart = await db["carts"].find_one({"user_id": current_user['_id']})

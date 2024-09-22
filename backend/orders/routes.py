@@ -4,13 +4,14 @@ from models.output import UserOutput
 from database import db
 from products.utils import convert_objectid_to_str
 
-
+# db.<nome_da_colecao>.find().pretty()
 router = APIRouter()
 
-@router.get("/orders", response_model=list)
+@router.get("/", response_model=list)
 async def list_orders(current_user: UserOutput = Depends(get_current_user)):
     # Busca as ordens do usuário no banco de dados
-    orders = await db["orders"].find({"user_id": current_user['_id']}).to_list(100)
+    print(current_user)
+    orders = await db["orders"].find({"user_id": str(current_user['_id'])}).to_list(100)
     
     # Converte ObjectId para string, se necessário
     for order in orders:

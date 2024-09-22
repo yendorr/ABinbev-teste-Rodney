@@ -110,7 +110,7 @@ export const addToCart = async (productId, token) => {
     try {
         console.log({ "product_id": productId, "quantity": 1 })
         const response = await axios.post(
-            `http://localhost:8000/cart/cart`, 
+            `http://localhost:8000/cart/`, 
             { "product_id": productId, "quantity": 1 }, 
             {
                 headers: {
@@ -126,7 +126,7 @@ export const addToCart = async (productId, token) => {
 
 export const viewCart = async (token) => {
     try {
-        const response = await axios.get(`${API_URL}/cart/cart`, {
+        const response = await axios.get(`${API_URL}/cart/`, {
             headers: {
                 Authorization: `Bearer ${token}`, // Altere conforme necessário
             },
@@ -158,7 +158,7 @@ export const deleteUser = async (userId) => {
 
 export const getCartItems = async () => {
     const token = localStorage.getItem('authToken'); // Adicione o token de autenticação
-    const response = await fetch('http://localhost:8000/cart/cart/', {
+    const response = await fetch('http://localhost:8000/cart/', {
         headers: {
             'Authorization': `Bearer ${token}`,
         },
@@ -186,7 +186,7 @@ export const finalizeOrder = async () => {
 
 export const getOrders = async () => {
     const token = localStorage.getItem('authToken'); // Altere conforme necessário
-    const response = await axios.get('http://localhost:8000/orders/orders', {
+    const response = await axios.get('http://localhost:8000/orders/', {
         headers: {
             'Authorization': `Bearer ${token}`,
         },

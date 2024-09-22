@@ -55,7 +55,7 @@ const Order = () => {
                     <li key={order._id}>
                         <div>
                             <strong>ID:</strong> {order._id}<br />
-                            <strong>Data:</strong> {new Date(order.createdAt).toLocaleDateString()}<br />
+                            {/* <strong>Data:</strong> {new Date(order.createdAt).toLocaleDateString()}<br /> */}
                             <strong>Itens:</strong>
                             <ul>
                                 {order.items.map((item, index) => (
