@@ -1,31 +1,46 @@
 import React, { useEffect, useState } from 'react';
-import { getCartItems, finalizeOrder } from '../api'; // Ajuste o caminho se necessário
+import { getCartItems, getProductById, finalizeOrder } from '../api'; // Ajuste o caminho se necessário
 
 const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [productNames, setProductNames] = useState({}); // Estado para armazenar os nomes dos produtos
 
     useEffect(() => {
         const fetchCartItems = async () => {
             try {
-                const data = await getCartItems(); // Obtenha os itens do carrinho
-                console.log('Cart items:', data); // Inspecione os dados retornados
-                setCartItems(data.items || []); // Use a propriedade items se existir
+                const data = await getCartItems();
+                setCartItems(data.items || []);
+                await fetchProductNames(data.items); // Chama a função para buscar os nomes dos produtos
             } catch (err) {
                 setError('Erro ao carregar itens do carrinho.');
                 console.error(err);
             }
         };
 
-        fetchCartItems(); // Chama a função ao montar o componente
+        fetchCartItems();
     }, []);
+
+    const fetchProductNames = async (items) => {
+        const names = {};
+        for (const item of items) {
+            try {
+                const product = await getProductById(item.product_id); // Busca o produto pelo ID
+                names[item.product_id] = product.name; // Armazena o nome do produto
+            } catch (err) {
+                console.error(`Erro ao buscar produto ${item.product_id}:`, err);
+            }
+        }
+        setProductNames(names); // Atualiza o estado com os nomes dos produtos
+    };
 
     const handleFinalizeOrder = async () => {
         try {
-            await finalizeOrder(); // Chama a rota para finalizar a compra
+            await finalizeOrder();
             setSuccess('Compra finalizada com sucesso!');
             setCartItems([]); // Limpa o carrinho após finalizar a compra
+            setProductNames({}); // Limpa os nomes dos produtos
         } catch (err) {
             setError('Erro ao finalizar a compra.');
             console.error(err);
@@ -43,7 +58,7 @@ const Cart = () => {
                 <ul>
                     {cartItems.map((item) => (
                         <li key={item.product_id}>
-                            Produto ID: {item.product_id} - Quantidade: {item.quantity}
+                            {productNames[item.product_id] || 'Carregando...'} - Quantidade: {item.quantity}
                         </li>
                     ))}
                 </ul>

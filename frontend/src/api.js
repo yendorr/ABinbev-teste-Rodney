@@ -56,6 +56,14 @@ export const getProducts = async () => {
     return response.json(); // Retorna os produtos em formato JSON
 };
 
+export const getProductById = async (id) => {
+    const response = await fetch(`http://localhost:8000/products/${id}`);
+    if (!response.ok) {
+        throw new Error('Failed to fetch product');
+    }
+    return await response.json();
+};
+
 
 
 export const updateProduct = async (id, updatedData) => {
@@ -156,7 +164,7 @@ export const getCartItems = async () => {
 
 export const finalizeOrder = async () => {
     const token = localStorage.getItem('authToken'); // Adicione o token de autenticação
-    const response = await fetch('http://localhost:8000/cart/order', {
+    const response = await fetch('http://localhost:8000/cart/order/', {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -166,5 +174,15 @@ export const finalizeOrder = async () => {
     if (!response.ok) {
         throw new Error('Failed to finalize order');
     }
+};
+
+export const getOrders = async () => {
+    const token = localStorage.getItem('authToken'); // Altere conforme necessário
+    const response = await axios.get('http://localhost:8000/orders/orders', {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
+    });
+    return response.data; // Retorna as ordens
 };
 
