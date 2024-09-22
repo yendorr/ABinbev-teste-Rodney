@@ -9,6 +9,20 @@ router = APIRouter()
 
 @router.post("/register", response_model=UserOutput)
 async def register(user: UserInput):
+    """
+This is an example of Google style.
+
+Args:
+    param1: This is the first param.
+    param2: This is a second param.
+
+Returns:
+    This is a description of what is returned.
+
+Raises:
+    KeyError: Raises an exception.
+"""
+
     existing_user = await db["users"].find_one({"username": user.username})
     if existing_user:
         raise HTTPException(status_code=400, detail="Username already registered")
@@ -19,6 +33,20 @@ async def register(user: UserInput):
 
 @router.post("/login", response_model=TokenOutput)
 async def login(user: UserLogin):
+    """
+This is an example of Google style.
+
+Args:
+    param1: This is the first param.
+    param2: This is a second param.
+
+Returns:
+    This is a description of what is returned.
+
+Raises:
+    KeyError: Raises an exception.
+"""
+
     user_db = await db["users"].find_one({"username": user.username})
     if not user_db or not verify_password(user.password, user_db["password"]):  # Verifica o hash
         raise HTTPException(status_code=400, detail="Invalid credentials")
@@ -27,6 +55,20 @@ async def login(user: UserLogin):
 
 @router.post("/token", response_model=TokenOutput)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+    """
+This is an example of Google style.
+
+Args:
+    param1: This is the first param.
+    param2: This is a second param.
+
+Returns:
+    This is a description of what is returned.
+
+Raises:
+    KeyError: Raises an exception.
+"""
+
     user = await db["users"].find_one({"username": form_data.username})
     if not user or not verify_password(form_data.password, user["password"]):
         raise HTTPException(status_code=401, detail="Incorrect username or password")
@@ -36,6 +78,20 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 
 @router.post("/change-password")
 async def change_password(password_data: PasswordChangeInput, current_user: UserOutput = Depends(get_current_user)):
+    """
+This is an example of Google style.
+
+Args:
+    param1: This is the first param.
+    param2: This is a second param.
+
+Returns:
+    This is a description of what is returned.
+
+Raises:
+    KeyError: Raises an exception.
+"""
+
     # Verifica se a senha atual está correta
     user_db = await db["users"].find_one({"username": current_user['username']})
     if not user_db or not verify_password(password_data.current_password, user_db["password"]):
@@ -49,6 +105,20 @@ async def change_password(password_data: PasswordChangeInput, current_user: User
 
 @router.delete("/users/{username}", response_model=dict)
 async def delete_user(username: str):
+    """
+This is an example of Google style.
+
+Args:
+    param1: This is the first param.
+    param2: This is a second param.
+
+Returns:
+    This is a description of what is returned.
+
+Raises:
+    KeyError: Raises an exception.
+"""
+
     # Verifica se o usuário existe
     user_db = await db["users"].find_one({"username": username})
     if not user_db:

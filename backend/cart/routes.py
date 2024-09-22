@@ -12,7 +12,20 @@ router = APIRouter()
 
 @router.get("/")
 async def view_cart(current_user: UserOutput = Depends(get_current_user)):
-    print(f'{current_user = }')
+    """
+This is an example of Google style.
+
+Args:
+    param1: This is the first param.
+    param2: This is a second param.
+
+Returns:
+    This is a description of what is returned.
+
+Raises:
+    KeyError: Raises an exception.
+"""
+
     cart = await db["carts"].find_one({"user_id": current_user['_id']})
     if not cart:
         return {"items": []}
@@ -21,6 +34,20 @@ async def view_cart(current_user: UserOutput = Depends(get_current_user)):
 
 @router.post("/")
 async def add_to_cart(item: CartItem, current_user: UserOutput = Depends(get_current_user)):
+    """
+This is an example of Google style.
+
+Args:
+    param1: This is the first param.
+    param2: This is a second param.
+
+Returns:
+    This is a description of what is returned.
+
+Raises:
+    KeyError: Raises an exception.
+"""
+
     # Adicionar item ao carrinho do usuário
     cart = await db["carts"].find_one({"user_id": current_user['_id']})
     if not cart:
@@ -39,6 +66,20 @@ async def add_to_cart(item: CartItem, current_user: UserOutput = Depends(get_cur
 
 @router.post("/order")
 async def place_order(current_user: UserOutput = Depends(get_current_user)):
+    """
+This is an example of Google style.
+
+Args:
+    param1: This is the first param.
+    param2: This is a second param.
+
+Returns:
+    This is a description of what is returned.
+
+Raises:
+    KeyError: Raises an exception.
+"""
+
     cart = await db["carts"].find_one({"user_id": current_user['_id']})
     if not cart or not cart["items"]:
         raise HTTPException(status_code=400, detail="Cart is empty")

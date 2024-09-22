@@ -16,6 +16,20 @@ async def list_products():
 
 @router.get("/{product_id}")
 async def get_product_by_id(product_id: str):
+    """
+This is an example of Google style.
+
+Args:
+    param1: This is the first param.
+    param2: This is a second param.
+
+Returns:
+    This is a description of what is returned.
+
+Raises:
+    KeyError: Raises an exception.
+"""
+
     try:
         # Converte a string para ObjectId
         product = await db["products"].find_one({"_id": ObjectId(product_id)})
@@ -27,12 +41,40 @@ async def get_product_by_id(product_id: str):
 
 @router.post("/", response_model=ProductOutput, dependencies=[Depends(check_admin)])
 async def add_product(product: ProductInput):
+    """
+This is an example of Google style.
+
+Args:
+    param1: This is the first param.
+    param2: This is a second param.
+
+Returns:
+    This is a description of what is returned.
+
+Raises:
+    KeyError: Raises an exception.
+"""
+
     product_data = product.dict()
     result = await db["products"].insert_one(product_data)
     return {"id": str(result.inserted_id), **product_data}
 
 @router.put("/{product_id}", response_model=ProductOutput, dependencies=[Depends(check_admin)])
 async def edit_product(product_id: str, product: ProductInput):
+    """
+This is an example of Google style.
+
+Args:
+    param1: This is the first param.
+    param2: This is a second param.
+
+Returns:
+    This is a description of what is returned.
+
+Raises:
+    KeyError: Raises an exception.
+"""
+
     # Converte o modelo de produto para um dicionário
     product_data = product.dict(exclude_unset=True)  # Exclui campos que não foram enviados na requisição
 
@@ -58,6 +100,20 @@ async def edit_product(product_id: str, product: ProductInput):
 
 @router.delete("/{product_id}", response_model=dict, dependencies=[Depends(check_admin)])
 async def delete_product(product_id: str):
+    """
+This is an example of Google style.
+
+Args:
+    param1: This is the first param.
+    param2: This is a second param.
+
+Returns:
+    This is a description of what is returned.
+
+Raises:
+    KeyError: Raises an exception.
+"""
+
     result = await db["products"].delete_one({"_id": ObjectId(product_id)})
     if result.deleted_count == 1:
         return {"message": "Product deleted successfully"}

@@ -9,6 +9,20 @@ router = APIRouter()
 
 @router.get("/", response_model=list)
 async def list_orders(current_user: UserOutput = Depends(get_current_user)):
+    """
+This is an example of Google style.
+
+Args:
+    param1: This is the first param.
+    param2: This is a second param.
+
+Returns:
+    This is a description of what is returned.
+
+Raises:
+    KeyError: Raises an exception.
+"""
+
     # Busca as ordens do usuário no banco de dados
     print(current_user)
     orders = await db["orders"].find({"user_id": str(current_user['_id'])}).to_list(100)

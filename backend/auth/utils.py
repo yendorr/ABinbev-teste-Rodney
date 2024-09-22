@@ -15,12 +15,54 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 def get_password_hash(password: str) -> str:
+    """
+This is an example of Google style.
+
+Args:
+    param1: This is the first param.
+    param2: This is a second param.
+
+Returns:
+    This is a description of what is returned.
+
+Raises:
+    KeyError: Raises an exception.
+"""
+
     return pwd_context.hash(password)
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """
+This is an example of Google style.
+
+Args:
+    param1: This is the first param.
+    param2: This is a second param.
+
+Returns:
+    This is a description of what is returned.
+
+Raises:
+    KeyError: Raises an exception.
+"""
+
     return pwd_context.verify(plain_password, hashed_password)
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
+    """
+This is an example of Google style.
+
+Args:
+    param1: This is the first param.
+    param2: This is a second param.
+
+Returns:
+    This is a description of what is returned.
+
+Raises:
+    KeyError: Raises an exception.
+"""
+
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
@@ -31,6 +73,20 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
     return encoded_jwt
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
+    """
+This is an example of Google style.
+
+Args:
+    param1: This is the first param.
+    param2: This is a second param.
+
+Returns:
+    This is a description of what is returned.
+
+Raises:
+    KeyError: Raises an exception.
+"""
+
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
@@ -44,7 +100,20 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         raise HTTPException(status_code=401, detail="Invalid token")
     
 async def check_admin(current_user: UserOutput = Depends(get_current_user)):
-    print(current_user)
+    """
+This is an example of Google style.
+
+Args:
+    param1: This is the first param.
+    param2: This is a second param.
+
+Returns:
+    This is a description of what is returned.
+
+Raises:
+    KeyError: Raises an exception.
+"""
+
     if not current_user['is_admin']:
         raise HTTPException(status_code=403, detail="Not enough permissions")
 
