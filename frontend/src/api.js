@@ -4,13 +4,17 @@ import axios from 'axios';
 const API_URL = 'http://localhost:8000'; 
 
 // Função para registrar um novo usuário
-export const registerUser = async (username, password, isAdmin) => {
+export const registerUser = async (username, password, is_admin) => {
     try {
         const response = await axios.post(`${API_URL}/auth/register`, {
             username,
             password,
-            isAdmin,
-        });
+            is_admin
+        }, {
+            headers: {
+              'accept': 'application/json',
+              'Content-Type': 'application/json'
+            }});
         return response.data;
     } catch (error) {
         throw error.response.data;
@@ -23,7 +27,11 @@ export const loginUser = async (username, password) => {
         const response = await axios.post(`${API_URL}/auth/login`, {
             username,
             password,
-        });
+        }, {
+            headers: {
+              'accept': 'application/json',
+              'Content-Type': 'application/json'
+            }});
         return response.data;
     } catch (error) {
         throw error.response.data;

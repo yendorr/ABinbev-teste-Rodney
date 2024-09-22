@@ -12,7 +12,6 @@ async def register(user: UserInput):
     existing_user = await db["users"].find_one({"username": user.username})
     if existing_user:
         raise HTTPException(status_code=400, detail="Username already registered")
-
     user_data = user.dict()
     user_data["password"] = get_password_hash(user.password)  # Hash da senha
     result = await db["users"].insert_one(user_data)

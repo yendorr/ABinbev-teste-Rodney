@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { registerUser } from '../api'; // Certifique-se de ajustar o caminho se necessário
+import { registerUser } from '../api';
 
 const Register = () => {
     const [username, setUsername] = useState('');
@@ -8,7 +8,11 @@ const Register = () => {
     const [isAdmin, setIsAdmin] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
-    const navigate = useNavigate(); // Alterado para useNavigate
+    const navigate = useNavigate();
+
+    const handleAdminToggle = () => {
+        setIsAdmin(!isAdmin); // Alterna o valor entre true e false
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -16,6 +20,7 @@ const Register = () => {
         setSuccess('');
 
         try {
+            console.log(isAdmin)
             const data = await registerUser(username, password, isAdmin);
             setSuccess('Usuário registrado com sucesso!');
             console.log('User registered:', data);
@@ -55,11 +60,12 @@ const Register = () => {
                     <label>
                         <input
                             type="checkbox"
-                            checked={isAdmin}
-                            onChange={() => setIsAdmin(!isAdmin)}
+                            checked={isAdmin} // O valor do checkbox reflete o estado
+                            onChange={handleAdminToggle} // Altera o estado ao clicar
                         />
                         Administrador
                     </label>
+                    <p>Status: {isAdmin ? "É administrador" : "Não é administrador"}</p>
                 </div>
                 <button type="submit">Registrar</button>
             </form>

@@ -5,7 +5,7 @@ from typing import List
 class UserInput(BaseModel):
     username: str
     password: str
-    is_admin: bool = False  # Por padrão, não é admin
+    is_admin: bool
 
 class PasswordChangeInput(BaseModel):
     current_password: str
