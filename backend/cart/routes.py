@@ -49,7 +49,10 @@ async def place_order(current_user: UserOutput = Depends(get_current_user)):
     for item in cart["items"]:
         product = await db["products"].find_one({"_id": ObjectId(item["product_id"])})
         if not product:
-            raise HTTPException(status_code=404, detail="Product not found")
+            print("Product not found: " + item["product_id"])
+            print("Continuing to next item...")
+            continue
+            # raise HTTPException(status_code=404, detail="Product not found")
 
         order_items.append({
             "product_id": str(item["product_id"]),  # Convertendo para string

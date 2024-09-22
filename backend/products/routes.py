@@ -14,6 +14,17 @@ async def list_products():
     products = await db["products"].find().to_list(100)
     return convert_objectid_to_str(products)
 
+@router.get("/{product_id}")
+async def get_product_by_id(product_id: str):
+    try:
+        # Converte a string para ObjectId
+        product = await db["products"].find_one({"_id": ObjectId(product_id)})
+        if product is None:
+            raise HTTPException(status_code=404, detail="Produto não encontrado")
+        return convert_objectid_to_str(product)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
 @router.post("/", response_model=ProductOutput, dependencies=[Depends(check_admin)])
 async def add_product(product: ProductInput):
     product_data = product.dict()
