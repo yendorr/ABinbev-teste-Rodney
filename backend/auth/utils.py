@@ -55,18 +55,18 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
     """
-This is an example of Google style.
+    Create an access token with an expiration time.
 
-Args:
-    param1: This is the first param.
-    param2: This is a second param.
+    Args:
+        data (dict): A dictionary containing the data to encode in the token.
+        expires_delta (Optional[timedelta]): The duration for which the token will be valid. If not provided, defaults to the value set by ACCESS_TOKEN_EXPIRE_MINUTES.
 
-Returns:
-    This is a description of what is returned.
+    Returns:
+        str: The encoded JWT access token.
 
-Raises:
-    KeyError: Raises an exception.
-"""
+    Raises:
+        Exception: Raises an exception if token encoding fails.
+    """
 
     to_encode = data.copy()
     if expires_delta:
