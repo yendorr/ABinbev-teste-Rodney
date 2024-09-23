@@ -10,19 +10,17 @@ router = APIRouter()
 @router.post("/register", response_model=UserOutput)
 async def register(user: UserInput):
     """
-This is an example of Google style.
+    Registers a new user in the system.
 
-Args:
-    param1: This is the first param.
-    param2: This is a second param.
+    Args:
+        user (UserInput): The input data for creating a new user, including username and password.
 
-Returns:
-    This is a description of what is returned.
+    Returns:
+        dict: A dictionary containing the `id` of the newly registered user and their user data.
 
-Raises:
-    KeyError: Raises an exception.
-"""
-
+    Raises:
+        HTTPException: If the username is already registered, raises a 400 HTTP exception with a message.
+    """
     existing_user = await db["users"].find_one({"username": user.username})
     if existing_user:
         raise HTTPException(status_code=400, detail="Username already registered")
