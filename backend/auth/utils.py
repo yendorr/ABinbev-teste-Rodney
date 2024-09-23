@@ -16,36 +16,41 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 def get_password_hash(password: str) -> str:
     """
-This is an example of Google style.
+    Generate a hashed password.
 
-Args:
-    param1: This is the first param.
-    param2: This is a second param.
+    Args:
+        password (str): The plaintext password to be hashed.
 
-Returns:
-    This is a description of what is returned.
+    Returns:
+        str: The hashed version of the password.
 
-Raises:
-    KeyError: Raises an exception.
-"""
-
+    Raises:
+        ValueError: Raises an exception if the password is empty.
+    """
+    
+    if not password:
+        raise ValueError("Password cannot be empty")
+    
     return pwd_context.hash(password)
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
-This is an example of Google style.
+    Verify a plaintext password against a hashed password.
 
-Args:
-    param1: This is the first param.
-    param2: This is a second param.
+    Args:
+        plain_password (str): The plaintext password to verify.
+        hashed_password (str): The hashed password to compare against.
 
-Returns:
-    This is a description of what is returned.
+    Returns:
+        bool: True if the plaintext password matches the hashed password, False otherwise.
 
-Raises:
-    KeyError: Raises an exception.
-"""
-
+    Raises:
+        ValueError: Raises an exception if the plaintext password or hashed password is empty.
+    """
+    
+    if not plain_password or not hashed_password:
+        raise ValueError("Passwords cannot be empty")
+    
     return pwd_context.verify(plain_password, hashed_password)
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
@@ -74,18 +79,18 @@ Raises:
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
     """
-This is an example of Google style.
+    Retrieve the current user from the provided token.
 
-Args:
-    param1: This is the first param.
-    param2: This is a second param.
+    Args:
+        token (str): The access token used for authentication.
 
-Returns:
-    This is a description of what is returned.
+    Returns:
+        dict: The user information retrieved from the database.
 
-Raises:
-    KeyError: Raises an exception.
-"""
+    Raises:
+        HTTPException: Raises a 401 error if the token is invalid or the user is not found.
+                       Raises a 404 error if the user does not exist.
+    """
 
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -101,18 +106,17 @@ Raises:
     
 async def check_admin(current_user: UserOutput = Depends(get_current_user)):
     """
-This is an example of Google style.
+    Check if the current user has admin privileges.
 
-Args:
-    param1: This is the first param.
-    param2: This is a second param.
+    Args:
+        current_user (UserOutput): The current user retrieved from the authentication token.
 
-Returns:
-    This is a description of what is returned.
+    Returns:
+        None: This function does not return a value. It raises an exception if the user is not an admin.
 
-Raises:
-    KeyError: Raises an exception.
-"""
+    Raises:
+        HTTPException: Raises a 403 error if the current user does not have admin permissions.
+    """
 
     if not current_user['is_admin']:
         raise HTTPException(status_code=403, detail="Not enough permissions")
