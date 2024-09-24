@@ -4,24 +4,22 @@ from models.output import UserOutput
 from database import db
 from products.utils import convert_objectid_to_str
 
-# db.<nome_da_colecao>.find().pretty()
 router = APIRouter()
 
 @router.get("/", response_model=list)
 async def list_orders(current_user: UserOutput = Depends(get_current_user)):
     """
-This is an example of Google style.
+    Retrieves a list of orders placed by the current user.
 
-Args:
-    param1: This is the first param.
-    param2: This is a second param.
+    Args:
+        current_user (UserOutput): The authenticated user, obtained through the authentication token.
 
-Returns:
-    This is a description of what is returned.
+    Returns:
+        list: A list of orders, where each order contains the order details including order ID, items, and total cost. All ObjectId fields are converted to strings.
 
-Raises:
-    KeyError: Raises an exception.
-"""
+    Raises:
+        KeyError: Raises an exception if there is an issue retrieving the current user.
+    """
 
     # Busca as ordens do usuário no banco de dados
     print(current_user)
@@ -34,3 +32,4 @@ Raises:
             item["product_id"] = str(item["product_id"])  # Converte product_id para string
 
     return convert_objectid_to_str(orders)
+

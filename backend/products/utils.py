@@ -4,19 +4,18 @@ from bson import ObjectId
 
 def convert_objectid_to_str(data):
     """
-This is an example of Google style.
+    Recursively converts ObjectId instances to their string representations in dictionaries, lists, or individual values.
 
-Args:
-    param1: This is the first param.
-    param2: This is a second param.
+    Args:
+        data (Any): The data to be processed. Can be a single value, list, or dictionary. If it's an ObjectId, it will be converted to a string.
 
-Returns:
-    This is a description of what is returned.
+    Returns:
+        Any: The same data structure with all ObjectId instances replaced by their string representations.
 
-Raises:
-    KeyError: Raises an exception.
-"""
-
+    Raises:
+        KeyError: If there is an error accessing dictionary keys.
+    """
+    
     if isinstance(data, ObjectId):
         return str(data)
     elif isinstance(data, list):

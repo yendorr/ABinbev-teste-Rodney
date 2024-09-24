@@ -2,12 +2,12 @@ version: "3.8"
 
 services:
   mongo:
-      image: mongo:6.0
-      container_name: mongo
-      ports:
-        - "27018:27017"  # Mapeia a porta 27018 do host para a porta 27017 do contêiner
-      volumes:
-        - mongo-data:/data/db
+    image: mongo:6.0
+    container_name: mongo
+    ports:
+      - "27018:27017"  # Mapeia a porta 27018 do host para a porta 27017 do contêiner
+    volumes:
+      - mongo-data:/data/db
 
   backend:
     build:
@@ -19,7 +19,7 @@ services:
     depends_on:
       - mongo  # Garante que o serviço mongo seja iniciado antes do backend
     environment:
-      MONGO_URL: mongodb://mongo:27017/ecom-db  # URL de conexão com o MongoDB
+      MONGO_URL: mongodb://mongo:27017/ecom-db  # URL de conexão com o MongoDB para o backend
     volumes:
       - ./backend:/app
 
@@ -31,8 +31,27 @@ services:
     depends_on:
       - backend
 
-  
+  mongo_test:
+    image: mongo:6.0
+    container_name: mongo_test
+    ports:
+      - "27019:27017"  # Mapeia a porta 27019 do host para a porta 27017 do contêiner
+    volumes:
+      - mongo-test-data:/data/db
+
+  test:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: test
+    depends_on:
+      - mongo_test
+    environment:
+      MONGO_URL: mongodb://mongo_test:27017/ecom-test  # URL de conexão com o MongoDB para os testes
+    command: ["poetry", "run", "pytest", "tests"]
 
 volumes:
   mongo-data:
+    driver: local
+  mongo-test-data:
     driver: local

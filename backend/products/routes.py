@@ -17,18 +17,17 @@ async def list_products():
 @router.get("/{product_id}")
 async def get_product_by_id(product_id: str):
     """
-This is an example of Google style.
+    Retrieves a product by its ID.
 
-Args:
-    param1: This is the first param.
-    param2: This is a second param.
+    Args:
+        product_id (str): The ID of the product to retrieve, as a string.
 
-Returns:
-    This is a description of what is returned.
+    Returns:
+        dict: A dictionary containing the product details if found. All ObjectId fields are converted to strings.
 
-Raises:
-    KeyError: Raises an exception.
-"""
+    Raises:
+        HTTPException: Raises a 404 if the product is not found or a 400 if the product ID is invalid or another error occurs.
+    """
 
     try:
         # Converte a string para ObjectId
@@ -39,41 +38,42 @@ Raises:
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @router.post("/", response_model=ProductOutput, dependencies=[Depends(check_admin)])
 async def add_product(product: ProductInput):
     """
-This is an example of Google style.
+    Adds a new product to the database. This route is restricted to admin users.
 
-Args:
-    param1: This is the first param.
-    param2: This is a second param.
+    Args:
+        product (ProductInput): The product data to be added, as an instance of the `ProductInput` model.
 
-Returns:
-    This is a description of what is returned.
+    Returns:
+        dict: A dictionary containing the new product's ID and the rest of the product details.
 
-Raises:
-    KeyError: Raises an exception.
-"""
+    Raises:
+        HTTPException: Raises an exception if there is an issue with the database operation.
+    """
 
     product_data = product.dict()
     result = await db["products"].insert_one(product_data)
     return {"id": str(result.inserted_id), **product_data}
 
+
 @router.put("/{product_id}", response_model=ProductOutput, dependencies=[Depends(check_admin)])
 async def edit_product(product_id: str, product: ProductInput):
     """
-This is an example of Google style.
+    Updates an existing product in the database. This route is restricted to admin users.
 
-Args:
-    param1: This is the first param.
-    param2: This is a second param.
+    Args:
+        product_id (str): The ID of the product to update.
+        product (ProductInput): The product data to update, as an instance of the `ProductInput` model.
 
-Returns:
-    This is a description of what is returned.
+    Returns:
+        dict: A dictionary containing the updated product's ID and details.
 
-Raises:
-    KeyError: Raises an exception.
-"""
+    Raises:
+        HTTPException: Raises a 404 error if the product is not found, or another HTTPException for other errors.
+    """
 
     # Converte o modelo de produto para um dicionário
     product_data = product.dict(exclude_unset=True)  # Exclui campos que não foram enviados na requisição
@@ -98,26 +98,27 @@ Raises:
     return updated_product
 
 
+
 @router.delete("/{product_id}", response_model=dict, dependencies=[Depends(check_admin)])
 async def delete_product(product_id: str):
     """
-This is an example of Google style.
+    Deletes a product from the database. This route is restricted to admin users.
 
-Args:
-    param1: This is the first param.
-    param2: This is a second param.
+    Args:
+        product_id (str): The ID of the product to delete.
 
-Returns:
-    This is a description of what is returned.
+    Returns:
+        dict: A message confirming that the product was successfully deleted.
 
-Raises:
-    KeyError: Raises an exception.
-"""
+    Raises:
+        HTTPException: Raises a 404 error if the product is not found.
+    """
 
     result = await db["products"].delete_one({"_id": ObjectId(product_id)})
     if result.deleted_count == 1:
         return {"message": "Product deleted successfully"}
     else:
         raise HTTPException(status_code=404, detail="Product not found")
+
     
 

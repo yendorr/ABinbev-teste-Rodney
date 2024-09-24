@@ -6,7 +6,7 @@ To run the project, you need to have Docker installed.
 
 Once you have Docker, clone this project, navigate to the root folder of the project (the folder where the `docker-compose.yml` file is located), an run the command
 ```bash
-docker-compose up -d --build
+docker-compose up backend frontend mongo --build
 ```
 By executing this command, you will start three Docker images: the database, the backend, and the frontend. The frontend depends on the backend to run, and the backend depends on the database.
 
@@ -122,7 +122,7 @@ Uma vez que você possua a ferramenta, clone este projeto, vá até a pasta raiz
 `
 
 ```bash
-docker-compose up -d --build
+docker-compose up backend frontend mongo --build
 ```
 
 
