@@ -16,6 +16,11 @@ docker-compose down
 ```
 This project was developed using the FARM stack (FastAPI, React, and MongoDB).
 
+# About Docker Compose
+
+Docker Compose orchestrates 5 containers: three are used for the application (Mongo, backend, frontend), and two are used for testing (mongo_test, test).
+
+
 ## About the backend
 
 Once Docker is running, you can access the backend at [http://localhost:8000](http://localhost:8000) and access the backend Swagger at [http://localhost:8000/docs](http://localhost:8000/docs).
@@ -127,6 +132,9 @@ products: [{
 
 I learned to use JWT, to perform user authentication, to separate data according to the user, and, curious about how this would be done in the front-end, I learned to develop a simple front-end that authenticates the user and displays the data related to them.
 
+I was able to improve my knowledge of Docker and learn how to run tests in a container. Mongo-mock was considered, but using a real database seemed to make more sense.
+
+
 
 ## License
 
@@ -158,6 +166,11 @@ docker-compose down
 
 
 Este projeto foi desenvolvido usando a stack FARM (FAstapi, React e Mongodb)
+
+### Sobre o Docker Compose
+
+O Docker Compose orquestra 5 contêineres: três são usados para a aplicação (Mongo, backend, frontend) e dois são utilizados para realizar testes (mongo_test, test).
+
 
 
 ## Sobre o back end
@@ -286,6 +299,8 @@ products: [{
 ## Sobre meu aprendizado
 
 Aprendi a usar JWT, a fazer autenticação de usuários, a separar os dados de acordo com o usuário e, curioso sobre como isso seria no front-end, aprendi a desenvolver um front-end simples que autentica o usuário e mostra os dados relacionados a ele.
+
+Pude aprimorar meus conhecimentos relacionados ao docker e aprender acomo executar testes em um container. mongo-mock foi considerado mas usar um banco de dados real pareceu fazer mais sentido.
 
 
 ## Licença
