@@ -122,6 +122,12 @@ products: [{
     quantity: number  
 }]  
 ```
+
+## About my learning
+
+I learned to use JWT, to perform user authentication, to separate data according to the user, and, curious about how this would be done in the front-end, I learned to develop a simple front-end that authenticates the user and displays the data related to them.
+
+
 ## License
 
 The project is licensed under the MIT license.
@@ -276,6 +282,10 @@ products: [{
     quantity: number
 }]
 ```
+
+## Sobre meu aprendizado
+
+Aprendi a usar JWT, a fazer autenticação de usuários, a separar os dados de acordo com o usuário e, curioso sobre como isso seria no front-end, aprendi a desenvolver um front-end simples que autentica o usuário e mostra os dados relacionados a ele.
 
 
 ## Licença
