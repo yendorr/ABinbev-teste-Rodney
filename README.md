@@ -46,6 +46,21 @@ The product list is common to all users, but only admin users can add, remove, a
 
 Each user can add products to their cart, which is unique to each user. They can view the items in their cart and complete the purchase, thereby clearing the user's cart and adding the transaction to the transaction list, which is also unique to each user.
 
+
+### About testing the backend
+
+To run the tests, it is also necessary to have Docker.
+
+To execute the tests, simply run the following command:
+```bash
+docker-compose up --abort-on-container-exit test --build
+```
+
+This command will run two containers: one environment for the tests and a dedicated database environment for testing.
+
+Detail about the tests: I encountered an issue with asynchronicity and couldn't resolve it in time. Therefore, all the tests are in the same function. For future work, I will fix this problem and separate the test functions.
+
+
 ## About the frontend
 
 Once Docker is running, you can access the frontend at [http://localhost:3000](http://localhost:3000).
@@ -169,6 +184,21 @@ Agora você pode usar as rotas bloqueadas.
 A lista de produtos é comum a todos os usuários, porém apenas usuários administradores podem adicionar, remover e editar produtos. 
 
 Cada usuário pode adcionar produtos ao seu carrinho, que é único para cada usuário. Ver os itens em seu carrinho e finalizar a compra, limpando assim o carrinho do usuário. e adicionando a transação à lista de transações, esta lista também é única para cada usuário.
+
+### Sobre testar o backend
+
+Para realizar os testes também é necessario possuir docker
+
+Para executar os testes basta executar o comando
+
+```bash
+docker-compose up --abort-on-container-exit test --build
+```
+
+Este comando irá rodar dois contêineres: um ambiente para os testes e um banco de dados dedicado para testes.
+
+Detalhe sobre os testes: esbarrei em um problema de assincronismo e não consegui resolver a tempo. Portanto, todos os testes estão na mesma função. Para trabalhos futuros, irei corrigir esse problema e separar as funções de teste.
+
 
 
 ## Sobre o front end
